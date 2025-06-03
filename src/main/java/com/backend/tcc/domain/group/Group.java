@@ -2,7 +2,7 @@ package com.backend.tcc.domain.group;
 
 import java.util.List;
 
-import com.backend.tcc.domain.publish.Publish;
+import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -40,5 +40,5 @@ public class Group {
     private List<User> users;
 
     @OneToMany(mappedBy = "group")
-    private List<Publish> publishs;
+    private List<Album> albums;
 }

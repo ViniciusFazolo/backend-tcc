@@ -1,11 +1,9 @@
-package com.backend.tcc.domain.publish;
+package com.backend.tcc.domain.group.album;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import com.backend.tcc.domain.commentary.Commentary;
-import com.backend.tcc.domain.group.album.Album;
-import com.backend.tcc.domain.user.User;
+import com.backend.tcc.domain.group.Group;
+import com.backend.tcc.domain.publish.Publish;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,22 +19,19 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class Publish {
+@AllArgsConstructor
+public class Album {
+
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
-    private String description;
-    private LocalDateTime whenSent;
-    private byte[] image;
+    private String image;
+    private String name;
 
     @ManyToOne
-    private User author;
+    private Group group;
 
-    @OneToMany
-    private List<Commentary> commentaries;
-
-    @ManyToOne
-    private Album album;
+    @OneToMany(mappedBy = "album")
+    private List<Publish> publishs;
 }
