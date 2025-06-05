@@ -2,7 +2,6 @@ package com.backend.tcc.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.tcc.dto.user.UserRequestDTO;
 import com.backend.tcc.dto.user.UserResponseDTO;
+import com.backend.tcc.dto.user.auth.RegisterUserDTO;
+import com.backend.tcc.dto.user.auth.ResponseUserDTO;
 import com.backend.tcc.services.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -36,17 +37,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> save(@RequestBody UserRequestDTO request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(request));
+    public ResponseEntity<ResponseUserDTO> save(@RequestBody RegisterUserDTO request) {
+        return service.save(request);
     }
 
     @PutMapping
-    public ResponseEntity<UserResponseDTO> update(@RequestBody UserRequestDTO request) {
-        return ResponseEntity.ok().body(service.update(request));
+    public ResponseEntity<ResponseUserDTO> update(@RequestBody UserRequestDTO request) {
+        return service.update(request);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable String id) {
-        return ResponseEntity.ok().body(service.delete(id));
+        return service.delete(id);
     }
 }

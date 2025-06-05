@@ -1,7 +1,6 @@
 package com.backend.tcc.domain.user;
 
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,9 +12,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.util.Collection;
 import java.util.List;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.backend.tcc.domain.commentary.Commentary;
 import com.backend.tcc.domain.group.Group;
@@ -26,7 +31,7 @@ import com.backend.tcc.domain.publish.Publish;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -35,6 +40,7 @@ public class User {
     private String password;
     private byte[] image;
 
+    @ManyToOne
     private UserRole role;
 
     @ManyToMany
@@ -46,4 +52,25 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Commentary> commentaries;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.role == null || this.role.getRole() == null) {
+            return List.of(); // Retorna uma lista vazia se a role for nula
+        }
+
+        if(this.role.getRole().equals("admin")) return List.of(new SimpleGrantedAuthority("ADMIN"), new SimpleGrantedAuthority("USER"));
+        else return List.of(new SimpleGrantedAuthority("USER"));
+    }
+
+    @Override
+    public String getUsername() {
+        return login;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
  }
