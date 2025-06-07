@@ -32,8 +32,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/auth/validate/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/role").permitAll()
                         //.requestMatchers(HttpMethod.POST, "/api/user").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                        //.anyRequest().permitAll()
+                        // .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

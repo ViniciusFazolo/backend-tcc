@@ -6,7 +6,6 @@ public record GroupRequestDTO(
         String id,
         String name,
         String description,
-        String image_name,
         MultipartFile image,
         String adm) {
 
