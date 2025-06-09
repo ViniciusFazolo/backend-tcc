@@ -41,7 +41,7 @@ public class AuthController {
         
         if(passwordEncoder.matches(credentials.password(), usuario.getPassword())){
             String token = this.tokenService.generateToken(usuario);
-            return ResponseEntity.ok().body(new LoginResponseDTO(token, usuario.getLogin(), usuario.getRole()));
+            return ResponseEntity.ok().body(new LoginResponseDTO(token, usuario.getLogin(), usuario.getRole().getRole(), usuario.getId()));
         }
 
         throw new PadraoException("Usuário ou senha incorretos");
