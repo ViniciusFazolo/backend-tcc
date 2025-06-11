@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.dto.group.GroupRequestDTO;
 import com.backend.tcc.dto.group.GroupResponseDTO;
+import com.backend.tcc.dto.group.album.AlbumResponseDTO;
 import com.backend.tcc.exceptions.PadraoException;
+import com.backend.tcc.mapper.AlbumMapper;
 import com.backend.tcc.mapper.GroupMapper;
+import com.backend.tcc.repositories.AlbumRepository;
 import com.backend.tcc.repositories.GroupRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 public class GroupService {
     private final GroupRepository repository;
     private final GroupMapper mapper;
+    private final AlbumRepository albumRepository;
+    private final AlbumMapper albumMapper;
 
     public List<GroupResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -29,6 +34,14 @@ public class GroupService {
         return repository.findById(id)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new PadraoException("Grupo não encontrado"));
+    }
+
+    public List<AlbumResponseDTO> findAlbumsByGroupId(String groupId) {
+        repository.findById(groupId)
+                .orElseThrow(() -> new PadraoException("Grupo não encontrado"));
+        return albumRepository.findByGroupId(groupId).stream()
+                .map(albumMapper::toDto)
+                .toList();
     }
 
     public GroupResponseDTO save(GroupRequestDTO request) {

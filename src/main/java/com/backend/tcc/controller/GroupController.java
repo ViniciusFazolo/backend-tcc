@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.tcc.dto.group.GroupRequestDTO;
 import com.backend.tcc.dto.group.GroupResponseDTO;
+import com.backend.tcc.dto.group.album.AlbumResponseDTO;
 import com.backend.tcc.services.GroupService;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,11 @@ public class GroupController {
     @GetMapping("/{id}")
     public ResponseEntity<GroupResponseDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @GetMapping("/{id}/albums")
+    public ResponseEntity<List<AlbumResponseDTO>> findAlbumsByGroupId(@PathVariable String id) {
+        return ResponseEntity.ok().body(service.findAlbumsByGroupId(id));
     }
 
     @PostMapping
