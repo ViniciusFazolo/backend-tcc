@@ -1,5 +1,7 @@
 package com.backend.tcc.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.backend.tcc.domain.group.album.Album;
@@ -24,5 +26,17 @@ public class AlbumService {
         } catch (Exception e) {
             throw new PadraoException("Erro ao criar álbum");
         }
+    }
+
+    public List<AlbumResponseDTO> findAll() {
+        return repository.findAll().stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
+    public List<AlbumResponseDTO> findByGroupId(String groupId) {
+        return repository.findByGroupId(groupId).stream()
+                .map(mapper::toDto)
+                .toList();
     }
 }

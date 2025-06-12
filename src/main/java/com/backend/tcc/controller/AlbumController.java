@@ -1,8 +1,13 @@
 package com.backend.tcc.controller;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,5 +27,15 @@ public class AlbumController {
     @PostMapping
     public ResponseEntity<AlbumResponseDTO> save(@ModelAttribute AlbumRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.save(request));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<AlbumResponseDTO>> findAll() {
+        return ResponseEntity.ok().body(service.findAll());
+    }
+
+    @GetMapping("/group/{groupId}")
+    public ResponseEntity<List<AlbumResponseDTO>> findByGroupId(@PathVariable String groupId) {
+        return ResponseEntity.ok().body(service.findByGroupId(groupId));
     }
 }
