@@ -8,7 +8,7 @@ import com.backend.tcc.dto.publish.PublishRequestDTO;
 import com.backend.tcc.dto.publish.PublishResponseDTO;
 import com.backend.tcc.utils.Utils;
 
-@Mapper(componentModel = "spring", uses = Utils.class)
+@Mapper(componentModel = "spring", uses = {Utils.class, UserMapper.class})
 public interface PublishMapper {
 
     @Mapping(source = "image", target = "image", qualifiedByName = "m2b")
@@ -18,7 +18,6 @@ public interface PublishMapper {
     Publish toEntity(PublishRequestDTO request);
 
     @Mapping(source = "image", target = "image", qualifiedByName = "b2b64")
-    @Mapping(source = "author.id", target = "author")
     @Mapping(source = "album.id", target = "album")
     PublishResponseDTO toDto(Publish obj);
 

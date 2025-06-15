@@ -24,6 +24,12 @@ public class PublishService {
                 .toList();
     }
 
+    public List<PublishResponseDTO> findByAlbumId(String id) {
+        return repository.findByAlbumId(id).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
     public PublishResponseDTO save(PublishRequestDTO request) {
         try {
             Publish entity = mapper.toEntity(request);
