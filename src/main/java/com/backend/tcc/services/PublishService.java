@@ -25,7 +25,7 @@ public class PublishService {
     }
 
     public List<PublishResponseDTO> findByAlbumId(String id) {
-        return repository.findByAlbumId(id).stream()
+        return repository.findByAlbumIdOrderByWhenSentDesc(id).stream()
                 .map(mapper::toDto)
                 .toList();
     }

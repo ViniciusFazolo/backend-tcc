@@ -8,5 +8,5 @@ import com.backend.tcc.domain.publish.Publish;
 
 public interface PublishRepository extends JpaRepository<Publish, String> {
 
-    List<Publish> findByAlbumId(String id);
+    List<Publish> findByAlbumIdOrderByWhenSentDesc(String id);
 }

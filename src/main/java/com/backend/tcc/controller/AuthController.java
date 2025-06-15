@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,7 +49,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseUserDTO> register(@RequestBody RegisterUserDTO credentials){
+    public ResponseEntity<ResponseUserDTO> register(@ModelAttribute RegisterUserDTO credentials){
         Optional<User> usuario = repository.findByLogin(credentials.login());
 
         if(usuario.isEmpty()){
@@ -57,7 +58,15 @@ public class AuthController {
             newUser.setLogin(credentials.login());
             newUser.setName(credentials.name());
 
-            UserRole role = roleRepository.findById(credentials.role()).orElseThrow(() -> new PadraoException("Role não encontrada"));
+            if (credentials.image() != null && !credentials.image().isEmpty()) {
+                try {
+                    newUser.setImage(credentials.image().getBytes());
+                } catch (Exception e) {
+                    throw new PadraoException("Erro ao processar imagem");
+                }
+            }
+
+            UserRole role = roleRepository.findByRole(credentials.role()).orElseThrow(() -> new PadraoException("Role não encontrada"));
             newUser.setRole(role);
             newUser = this.repository.save(newUser);
             
