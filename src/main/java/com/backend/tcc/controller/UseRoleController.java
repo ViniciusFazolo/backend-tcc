@@ -1,6 +1,7 @@
 package com.backend.tcc.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,7 +27,7 @@ public class UseRoleController {
 
     @PostMapping
     public UserRole criar(@RequestBody UserRole obj){
-        UserRole role = roleRepository.findByRole(obj.getRole());
+        Optional<UserRole> role = roleRepository.findByRole(obj.getRole());
 
         if(role != null){
             throw new PadraoException("Esse cargo já existe");
