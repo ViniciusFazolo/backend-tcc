@@ -30,6 +30,11 @@ public class GroupController {
     public ResponseEntity<List<GroupResponseDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
+    
+    @GetMapping("/userId/{id}")
+    public ResponseEntity<List<GroupResponseDTO>> findAllByUserId(@PathVariable String id) {
+        return ResponseEntity.ok().body(service.findAllByUserId(id));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<GroupResponseDTO> findById(@PathVariable String id) {

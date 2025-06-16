@@ -32,6 +32,12 @@ public class GroupService {
                 .map(mapper::toDto)
                 .toList();
     }
+  
+    public List<GroupResponseDTO> findAllByUserId(String id) {
+        return repository.findByUserId(id).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
 
     public GroupResponseDTO findById(String id) {
         return repository.findById(id)
