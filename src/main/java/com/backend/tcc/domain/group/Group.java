@@ -1,5 +1,6 @@
 package com.backend.tcc.domain.group;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -49,7 +50,7 @@ public class Group {
 
     @JsonIgnore
     @ManyToMany(mappedBy = "groups")
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "group")
     private List<Album> albums;

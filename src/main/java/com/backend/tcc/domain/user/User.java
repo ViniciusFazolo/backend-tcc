@@ -18,6 +18,7 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class User implements UserDetails{
 
     @ManyToMany
     @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "author")
     private List<Publish> publishs;
