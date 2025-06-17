@@ -29,7 +29,7 @@ public class UseRoleController {
     public UserRole criar(@RequestBody UserRole obj){
         Optional<UserRole> role = roleRepository.findByRole(obj.getRole());
 
-        if(role != null){
+        if(role.isPresent()){
             throw new PadraoException("Esse cargo já existe");
         }
 
