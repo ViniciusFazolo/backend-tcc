@@ -8,7 +8,7 @@ import com.backend.tcc.dto.group.GroupRequestDTO;
 import com.backend.tcc.dto.group.GroupResponseDTO;
 import com.backend.tcc.utils.Utils;
 
-@Mapper(componentModel = "spring", uses = Utils.class)
+@Mapper(componentModel = "spring", uses = {Utils.class, UserMapper.class})
 public interface GroupMapper {
 
     @Mapping(target = "adm.id", source = "adm")
@@ -16,6 +16,5 @@ public interface GroupMapper {
     Group toEntity(GroupRequestDTO request);
     
     @Mapping(source = "image", target = "image", qualifiedByName = "b2b64")
-    @Mapping(source = "adm.id", target = "adm")
     GroupResponseDTO toDto(Group obj);
 }

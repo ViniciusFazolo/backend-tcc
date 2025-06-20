@@ -1,8 +1,10 @@
 package com.backend.tcc.dto.group;
 
+import com.backend.tcc.dto.user.UserResponseDTO;
+
 public record GroupResponseDTO(
         String id,
-        String adm,
+        UserResponseDTO adm,
         String description,
         String image,
         String image_name,
