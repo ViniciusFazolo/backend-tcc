@@ -16,6 +16,7 @@ import com.backend.tcc.dto.user.auth.RegisterUserDTO;
 import com.backend.tcc.dto.user.auth.ResponseUserDTO;
 import com.backend.tcc.exceptions.PadraoException;
 import com.backend.tcc.mapper.UserMapper;
+import com.backend.tcc.repositories.GroupRepository;
 import com.backend.tcc.repositories.UserRepository;
 import com.backend.tcc.repositories.UserRoleRepository;
 
@@ -28,11 +29,19 @@ public class UserService {
     private final UserRepository repository;
     private final UserRoleRepository roleRepository;
     private final UserMapper mapper;
+    private final GroupRepository groupRepository;
 
     public List<UserResponseDTO> findAll() {
         return repository.findAll().stream()
                 .map(mapper::toDto)
                 .toList();
+    }
+    
+    public ResponseEntity<List<UserResponseDTO>> findByGroupId(String id) {
+        groupRepository.findById(id).orElseThrow(() -> new PadraoException("Grupo não encontrado"));
+        List<UserResponseDTO> objs = repository.findByGroupId(id).stream().map(mapper::toDto).toList();
+
+        return ResponseEntity.ok().body(objs);
     }
 
     public UserResponseDTO findById(String id) {

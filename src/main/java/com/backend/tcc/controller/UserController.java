@@ -30,10 +30,15 @@ public class UserController {
     public ResponseEntity<List<UserResponseDTO>> findAll() {
         return ResponseEntity.ok().body(service.findAll());
     }
-
+    
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+    
+    @GetMapping("/byGroupId/{id}")
+    public ResponseEntity<List<UserResponseDTO>> findByGroupId(@PathVariable String id) {
+        return service.findByGroupId(id);
     }
 
     @PostMapping
