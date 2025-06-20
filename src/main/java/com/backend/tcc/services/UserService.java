@@ -41,15 +41,6 @@ public class UserService {
                 .orElseThrow(() -> new PadraoException("Usuário não encontrado"));
     }
 
-    // public UserResponseDTO save(UserRequestDTO request) {
-    //     try {
-    //         User entity = mapper.toEntity(request);
-    //         return mapper.toDto(repository.save(entity));
-    //     } catch (Exception e) {
-    //         throw new PadraoException("Erro ao criar usuário");
-    //     }
-    // }
-
     public ResponseEntity<ResponseUserDTO> save(RegisterUserDTO request) {
         try {
             User obj = new User();
@@ -89,17 +80,6 @@ public class UserService {
             throw new PadraoException("Erro ao atualizar registro. Tente novamente");
         }
     }
-
-    // public UserResponseDTO update(UserRequestDTO request) {
-    //     try {
-    //         User entity = repository.findById(request.id())
-    //                 .orElseThrow(() -> new PadraoException("Usuário não encontrado"));
-    //         entity = mapper.toEntity(request);
-    //         return mapper.toDto(repository.save(entity));
-    //     } catch (Exception e) {
-    //         throw new PadraoException("Erro ao atualizar usuário");
-    //     }
-    // }
 
     public ResponseEntity<String> delete(String id) {
         try {
