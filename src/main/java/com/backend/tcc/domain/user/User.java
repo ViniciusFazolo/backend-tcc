@@ -30,7 +30,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.backend.tcc.domain.commentary.Commentary;
 import com.backend.tcc.domain.group.Group;
-import com.backend.tcc.domain.publish.Publish;
+import com.backend.tcc.domain.userpublish.UserPublish;
 
 @Entity(name = "users")
 @Getter
@@ -59,10 +59,10 @@ public class User implements UserDetails{
     private List<Group> groups = new ArrayList<>();
 
     @OneToMany(mappedBy = "author")
-    private List<Publish> publishs;
-
-    @OneToMany(mappedBy = "author")
     private List<Commentary> commentaries;
+
+    @OneToMany(mappedBy = "user")
+    private List<UserPublish> userPublishs = new ArrayList<>();;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

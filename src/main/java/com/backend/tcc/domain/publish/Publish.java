@@ -1,6 +1,7 @@
 package com.backend.tcc.domain.publish;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.annotations.JdbcTypeCode;
@@ -8,8 +9,7 @@ import org.hibernate.type.SqlTypes;
 
 import com.backend.tcc.domain.commentary.Commentary;
 import com.backend.tcc.domain.group.album.Album;
-import com.backend.tcc.domain.image.Images;
-import com.backend.tcc.domain.user.User;
+import com.backend.tcc.domain.userpublish.UserPublish;
 
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -44,11 +44,11 @@ public class Publish {
     @JdbcTypeCode(SqlTypes.VARBINARY)
     private List<byte[]> images;
 
-    @ManyToOne
-    private User author;
-
     @OneToMany
     private List<Commentary> commentaries;
+
+    @OneToMany(mappedBy = "publish")
+    private List<UserPublish> userPublishs = new ArrayList<>();;
 
     @ManyToOne
     private Album album;
