@@ -16,6 +16,5 @@ public interface GroupMapper {
     Group toEntity(GroupRequestDTO request);
     
     @Mapping(source = "image", target = "image", qualifiedByName = "b2b64")
-    @Mapping(source = "userGroups", target = "userGroups", qualifiedByName = "firstElement")
     GroupResponseDTO toDto(Group obj);
 }

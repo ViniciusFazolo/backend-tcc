@@ -1,6 +1,7 @@
 package com.backend.tcc.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,20 @@ public class GroupService {
     }
   
     public List<GroupResponseDTO> findAllByUserId(String id) {
-        return repository.findByUserId(id).stream()
-                .map(mapper::toDto)
-                .toList();
+        return repository.findByUserId(id)
+                .stream()
+                .map(group -> {
+                    
+                    Optional<UserGroup> ugObj = group.getUserGroups()
+                    .stream()
+                            .filter(ug -> ug.getGroup().getId().equals(group.getId()) && ug.getUser().getId().equals(id))
+                            .findFirst();
+                            
+                    group.getUserGroups().clear();
+                    if(ugObj.isPresent())  group.getUserGroups().add(ugObj.get());
+                    return mapper.toDto(group);
+                })
+                .toList();  
     }
 
     public GroupResponseDTO findById(String id) {
