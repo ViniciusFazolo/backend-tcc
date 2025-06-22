@@ -1,17 +1,22 @@
 package com.backend.tcc.services;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.publish.Publish;
 import com.backend.tcc.domain.user.User;
+import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.domain.userpublish.UserPublish;
 import com.backend.tcc.dto.publish.PublishRequestDTO;
 import com.backend.tcc.dto.publish.PublishResponseDTO;
 import com.backend.tcc.exceptions.PadraoException;
 import com.backend.tcc.mapper.PublishMapper;
+import com.backend.tcc.repositories.AlbumRepository;
 import com.backend.tcc.repositories.PublishRepository;
+import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserPublishRepository;
 import com.backend.tcc.repositories.UserRepository;
 
@@ -24,6 +29,8 @@ public class PublishService {
     private final PublishMapper mapper;
     private final UserRepository userRepository;
     private final UserPublishRepository userPublishRepository;
+    private final UserGroupRepository userGroupRepository;
+    private final AlbumRepository albumRepository;
 
     public List<PublishResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -52,8 +59,14 @@ public class PublishService {
             UserPublish userPublish = new UserPublish();
             userPublish.setUser(user);
             userPublish.setPublish(entity);
-
             userPublishRepository.save(userPublish);
+
+
+            Album album = albumRepository.findById(request.album()).orElseThrow(() -> new PadraoException("Album não encontrado"));
+            UserGroup userGroup = userGroupRepository.findByUserIdAndGroupId(user.getId(), album.getGroup().getId());
+            userGroup.setTotalNotifies(userGroup.getTotalNotifies() + 1);
+            userGroup.setHourLastPublish(LocalTime.now());
+            userGroupRepository.save(userGroup);
 
             return mapper.toDto(entity);
         } catch (Exception e) {
