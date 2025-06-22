@@ -15,6 +15,6 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByLogin(String login);
 
-    @Query("SELECT u FROM users u JOIN u.groups g WHERE g.id = :groupId")
+    @Query("SELECT u FROM users u JOIN u.userGroups ug WHERE ug.group.id = :groupId")
     List<User> findByGroupId(@Param("groupId") String id);
 }
