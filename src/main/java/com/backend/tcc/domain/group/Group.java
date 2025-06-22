@@ -8,6 +8,7 @@ import org.hibernate.type.SqlTypes;
 
 import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.user.User;
+import com.backend.tcc.domain.usergroup.UserGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Basic;
@@ -18,7 +19,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -49,8 +49,8 @@ public class Group {
     private User adm;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "groups")
-    private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy = "group")
+    private List<UserGroup> userGroups = new ArrayList<>();
 
     @OneToMany(mappedBy = "group")
     private List<Album> albums;
