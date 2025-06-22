@@ -49,4 +49,8 @@ public class Utils {
         return Base64.getDecoder().decode(pureBase64);
     }
 
+    @Named("firstElement")
+    public static <T> T getFirstElement(List<T> list) {
+        return (list != null && !list.isEmpty()) ? list.get(0) : null;
+    }
 }

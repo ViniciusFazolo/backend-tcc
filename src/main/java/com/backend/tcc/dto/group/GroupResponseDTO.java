@@ -1,5 +1,6 @@
 package com.backend.tcc.dto.group;
 
+import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.dto.user.UserResponseDTO;
 
 public record GroupResponseDTO(
@@ -8,5 +9,7 @@ public record GroupResponseDTO(
         String description,
         String image,
         String image_name,
-        String name) {
+        String name,
+        UserGroup userGroups
+        ) {
 }
