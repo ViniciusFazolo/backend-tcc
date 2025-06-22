@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.user.User;
+import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.dto.group.GroupRequestDTO;
 import com.backend.tcc.dto.group.GroupResponseDTO;
 import com.backend.tcc.dto.group.album.AlbumResponseDTO;
@@ -14,6 +15,7 @@ import com.backend.tcc.mapper.AlbumMapper;
 import com.backend.tcc.mapper.GroupMapper;
 import com.backend.tcc.repositories.AlbumRepository;
 import com.backend.tcc.repositories.GroupRepository;
+import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,7 @@ public class GroupService {
     private final AlbumRepository albumRepository;
     private final AlbumMapper albumMapper;
     private final UserRepository userRepository;
+    private final UserGroupRepository userGroupRepository;
 
     public List<GroupResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -57,10 +60,12 @@ public class GroupService {
         try {
             User user = userRepository.findById(request.adm()).orElseThrow(() -> new PadraoException("Usuário não encontrado"));
             Group entity = mapper.toEntity(request);
-
             entity = repository.save(entity);
-            user.getGroups().add(entity);
-            userRepository.save(user);
+
+            UserGroup userGroup = new UserGroup();
+            userGroup.setGroup(entity);
+            userGroup.setUser(user);
+            userGroupRepository.save(userGroup);
             
             return mapper.toDto(entity);
         } catch (Exception e) {
