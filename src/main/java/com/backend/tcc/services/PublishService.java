@@ -63,10 +63,12 @@ public class PublishService {
 
 
             Album album = albumRepository.findById(request.album()).orElseThrow(() -> new PadraoException("Album não encontrado"));
-            UserGroup userGroup = userGroupRepository.findByUserIdAndGroupId(user.getId(), album.getGroup().getId());
-            userGroup.setTotalNotifies(userGroup.getTotalNotifies() + 1);
-            userGroup.setHourLastPublish(LocalTime.now());
-            userGroupRepository.save(userGroup);
+            List<UserGroup> userGroup = userGroupRepository.findByGroupId(album.getGroup().getId());
+            userGroup.stream().forEach(ug -> {
+                ug.setTotalNotifies(ug.getTotalNotifies() + 1);
+                ug.setHourLastPublish(LocalTime.now());
+            });
+            userGroupRepository.saveAll(userGroup);
 
             return mapper.toDto(entity);
         } catch (Exception e) {
