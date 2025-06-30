@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import com.backend.tcc.domain.userpublish.UserPublish;
 
+@Repository
 public interface UserPublishRepository extends JpaRepository<UserPublish, String> {
     @Query("""
         SELECT up FROM UserPublish up
