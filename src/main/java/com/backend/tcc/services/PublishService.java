@@ -64,7 +64,7 @@ public class PublishService {
 
             Album album = albumRepository.findById(request.album()).orElseThrow(() -> new PadraoException("Album não encontrado"));
             List<UserGroup> userGroup = userGroupRepository.findByGroupId(album.getGroup().getId());
-            userGroup.stream().forEach(ug -> {
+            userGroup.stream().filter(ug -> ug.getUser().getId() != request.author()).forEach(ug -> {
                 ug.setTotalNotifies(ug.getTotalNotifies() + 1);
                 ug.setHourLastPublish(LocalTime.now());
             });
