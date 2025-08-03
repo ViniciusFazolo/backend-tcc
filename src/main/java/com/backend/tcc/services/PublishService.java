@@ -4,6 +4,7 @@ import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.publish.Publish;
@@ -31,6 +32,7 @@ public class PublishService {
     private final UserPublishRepository userPublishRepository;
     private final UserGroupRepository userGroupRepository;
     private final AlbumRepository albumRepository;
+    private final CloudinaryService cloudinaryService;
 
     public List<PublishResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -54,6 +56,14 @@ public class PublishService {
                     .orElseThrow(() -> new PadraoException("Usuário não encontrado"));
 
             Publish entity = mapper.toEntity(request);
+
+           if (request.images() != null && !request.images().isEmpty()) {
+                for (MultipartFile image : request.images()) {
+                    String imageUrl = cloudinaryService.uploadFile(image);
+                    entity.getImages().add(imageUrl);
+                }
+            }
+
             entity = repository.save(entity);
             
             UserPublish userPublish = new UserPublish();

@@ -12,9 +12,8 @@ import com.backend.tcc.utils.Utils;
 public interface GroupMapper {
 
     @Mapping(target = "adm.id", source = "adm")
-    @Mapping(source = "image", target = "image", qualifiedByName = "m2b")
+    @Mapping(target = "image", ignore = true)
     Group toEntity(GroupRequestDTO request);
     
-    @Mapping(source = "image", target = "image", qualifiedByName = "b2b64")
     GroupResponseDTO toDto(Group obj);
 }

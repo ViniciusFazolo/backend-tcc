@@ -18,10 +18,17 @@ import lombok.RequiredArgsConstructor;
 public class AlbumService {
     private final AlbumMapper mapper;
     private final AlbumRepository repository;
+    private final CloudinaryService cloudinaryService;
 
     public AlbumResponseDTO save(AlbumRequestDTO request) {
         try {
             Album entity = mapper.toEntity(request);
+
+            if (request.image() != null && !request.image().isEmpty()) {
+                String imageUrl = cloudinaryService.uploadFile(request.image());
+                entity.setImage(imageUrl);
+            }
+
             return mapper.toDto(repository.save(entity));
         } catch (Exception e) {
             throw new PadraoException("Erro ao criar álbum");

@@ -30,6 +30,7 @@ public class GroupService {
     private final AlbumMapper albumMapper;
     private final UserRepository userRepository;
     private final UserGroupRepository userGroupRepository;
+    private final CloudinaryService cloudinaryService;
 
     public List<GroupResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -72,6 +73,12 @@ public class GroupService {
         try {
             User user = userRepository.findById(request.adm()).orElseThrow(() -> new PadraoException("Usuário não encontrado"));
             Group entity = mapper.toEntity(request);
+
+            if (request.image() != null && !request.image().isEmpty()) {
+                String imageUrl = cloudinaryService.uploadFile(request.image());
+                entity.setImage(imageUrl);
+            }
+
             entity = repository.save(entity);
 
             UserGroup userGroup = new UserGroup();
@@ -91,6 +98,17 @@ public class GroupService {
             Group entity = repository.findById(request.id())
                     .orElseThrow(() -> new PadraoException("Grupo não encontrado"));
             entity = mapper.toEntity(request);
+            String oldImage = entity.getImage();
+
+            if (request.image() != null && !request.image().isEmpty()) {
+                cloudinaryService.deleteFileByUrl(oldImage);
+                
+                String newImageUrl = cloudinaryService.uploadFile(request.image());
+                entity.setImage(newImageUrl);
+            }else{
+                entity.setImage(oldImage);
+            }
+
             return mapper.toDto(repository.save(entity));
         } catch (Exception e) {
             throw new PadraoException("Erro ao atualizar grupo");
@@ -99,7 +117,10 @@ public class GroupService {
 
     public String delete(String id) {
         try {
+            Group obj = repository.findById(id).orElseThrow(() -> new PadraoException("Grupo não encontrado"));
+
             repository.deleteById(id);
+            cloudinaryService.deleteFileByUrl(obj.getImage());
 
             return "Deletado com sucesso";
         } catch (Exception e) {

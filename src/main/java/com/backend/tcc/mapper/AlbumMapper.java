@@ -13,11 +13,10 @@ import com.backend.tcc.utils.Utils;
 @Mapper(componentModel = "spring", uses = Utils.class)
 public interface AlbumMapper {
 
-    @Mapping(source = "image", target = "image", qualifiedByName = "m2b")
+    @Mapping(target = "image", ignore = true)
     @Mapping(source = "group", target = "group", qualifiedByName = "mapGroup")
     Album toEntity(AlbumRequestDTO request);
 
-    @Mapping(source = "image", target = "image", qualifiedByName = "b2b64")
     @Mapping(target = "group", source = "group.id")
     AlbumResponseDTO toDto(Album obj);
     
