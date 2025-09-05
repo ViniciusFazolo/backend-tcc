@@ -22,7 +22,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "groups")
+@Entity(name="people_group")
 @Getter
 @Setter
 @AllArgsConstructor

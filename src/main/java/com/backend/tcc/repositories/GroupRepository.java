@@ -13,7 +13,7 @@ import com.backend.tcc.domain.group.Group;
 @Repository
 public interface GroupRepository extends JpaRepository<Group, String> {
 
-    @Query("SELECT g FROM groups g JOIN g.userGroups ug WHERE ug.user.id = :userId")
+    @Query("SELECT g FROM people_group g JOIN g.userGroups ug WHERE ug.user.id = :userId")
     List<Group> findByUserId(@Param("userId") String userId);
 
 }
