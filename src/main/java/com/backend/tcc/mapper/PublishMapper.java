@@ -22,9 +22,9 @@ public interface PublishMapper {
     
     @Mapping(source = "publish.id", target = "id")
     @Mapping(source = "publish.description", target = "description")
-    @Mapping(source = "publish.images", target = "images")
     @Mapping(source = "user", target = "author")
     @Mapping(source = "publish.whenSent", target = "whenSent")
     @Mapping(source = "publish.album.id", target = "album")
+    @Mapping(source = "publish.images", target = "images")
     PublishResponseDTO toDto(UserPublish obj);
 }

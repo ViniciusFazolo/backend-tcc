@@ -1,12 +1,14 @@
 package com.backend.tcc.services;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.tcc.domain.group.album.Album;
+import com.backend.tcc.domain.image.Images;
 import com.backend.tcc.domain.publish.Publish;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
@@ -16,6 +18,7 @@ import com.backend.tcc.dto.publish.PublishResponseDTO;
 import com.backend.tcc.exceptions.PadraoException;
 import com.backend.tcc.mapper.PublishMapper;
 import com.backend.tcc.repositories.AlbumRepository;
+import com.backend.tcc.repositories.ImageRepository;
 import com.backend.tcc.repositories.PublishRepository;
 import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserPublishRepository;
@@ -31,6 +34,7 @@ public class PublishService {
     private final UserRepository userRepository;
     private final UserPublishRepository userPublishRepository;
     private final UserGroupRepository userGroupRepository;
+    private final ImageRepository imageRepository;
     private final AlbumRepository albumRepository;
     private final CloudinaryService cloudinaryService;
 
@@ -57,13 +61,6 @@ public class PublishService {
 
             Publish entity = mapper.toEntity(request);
 
-           if (request.images() != null && !request.images().isEmpty()) {
-                for (MultipartFile image : request.images()) {
-                    String imageUrl = cloudinaryService.uploadFile(image);
-                    entity.getImages().add(imageUrl);
-                }
-            }
-
             entity = repository.save(entity);
             
             UserPublish userPublish = new UserPublish();
@@ -71,6 +68,20 @@ public class PublishService {
             userPublish.setPublish(entity);
             userPublishRepository.save(userPublish);
 
+            List<Images> imagesObject = new ArrayList<>();
+            if (request.images() != null && !request.images().isEmpty()) {
+                for (MultipartFile image : request.images()) {
+                    String imageUrl = cloudinaryService.uploadFile(image);
+
+                    Images imageObject = new Images();
+                    imageObject.setImage(imageUrl);
+                    imageObject.setPublish(entity);
+
+                    imagesObject.add(imageObject);
+                }
+            }
+
+            imageRepository.saveAll(imagesObject);
 
             Album album = albumRepository.findById(request.album()).orElseThrow(() -> new PadraoException("Album não encontrado"));
             List<UserGroup> userGroup = userGroupRepository.findByGroupId(album.getGroup().getId());

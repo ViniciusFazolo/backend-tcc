@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.backend.tcc.domain.commentary.Commentary;
 import com.backend.tcc.domain.group.album.Album;
+import com.backend.tcc.domain.image.Images;
 import com.backend.tcc.domain.userpublish.UserPublish;
 
 import jakarta.persistence.Entity;
@@ -31,7 +32,8 @@ public class Publish {
     private String description;
     private LocalDateTime whenSent;
 
-    private List<String> images = new ArrayList<>();
+    @OneToMany(mappedBy = "publish")
+    private List<Images> images = new ArrayList<>();
 
     @OneToMany
     private List<Commentary> commentaries;
