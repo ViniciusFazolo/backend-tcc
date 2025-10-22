@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.tcc.constants.Contants;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.user.UserRole;
 import com.backend.tcc.dto.user.auth.LoginRequestDTO;
@@ -22,6 +23,7 @@ import com.backend.tcc.exceptions.PadraoException;
 import com.backend.tcc.repositories.UserRepository;
 import com.backend.tcc.repositories.UserRoleRepository;
 import com.backend.tcc.security.TokenService;
+import com.backend.tcc.services.CloudinaryService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +36,7 @@ public class AuthController {
     private final UserRoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final CloudinaryService cloudinaryService;
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO credentials){
@@ -58,12 +61,15 @@ public class AuthController {
             newUser.setLogin(credentials.login());
             newUser.setName(credentials.name());
 
-            if (credentials.image() != null && !credentials.image().isEmpty()) {
-                try {
-                    newUser.setImage(credentials.image().getBytes());
-                } catch (Exception e) {
-                    throw new PadraoException("Erro ao processar imagem");
+            try {
+                if (credentials.image() != null && !credentials.image().isEmpty()) {
+                    String imageUrl = cloudinaryService.uploadFile(credentials.image());
+                    newUser.setImage(imageUrl);
+                }else{
+                    newUser.setImage(Contants.GROUP_NOIMAGE_URL);
                 }
+            } catch (Exception e) {
+                throw new PadraoException("Erro ao salvar imagem");
             }
 
             UserRole role = roleRepository.findByRole(credentials.role()).orElseThrow(() -> new PadraoException("Role não encontrada"));

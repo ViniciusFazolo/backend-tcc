@@ -41,12 +41,7 @@ public class User implements UserDetails{
     private String name;
     private String login;
     private String password;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "image")
-    @JdbcTypeCode(SqlTypes.VARBINARY)
-    private byte[] image;
+    private String image;
 
     @ManyToOne
     private UserRole role;
