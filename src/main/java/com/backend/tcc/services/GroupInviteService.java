@@ -29,14 +29,14 @@ public class GroupInviteService {
     private final UserGroupRepository userGroupRepository;
     private final UserMapper userMapper;
 
-    public void sendInvite(GroupInviteRequestDTO request, String invitedById) {
+    public void sendInvite(GroupInviteRequestDTO request) {
         Group group = groupRepository.findById(request.groupId())
                 .orElseThrow(() -> new PadraoException("Grupo não encontrado"));
 
-        User invitedUser = userRepository.findByLogin(request.login())
+        User invitedUser = userRepository.findByLogin(request.receiverLogin())
                 .orElseThrow(() -> new PadraoException("Usuário a ser convidado não encontrado"));
 
-        User invitedBy = userRepository.findById(invitedById)
+        User invitedBy = userRepository.findById(request.senderId())
                 .orElseThrow(() -> new PadraoException("Usuário que convida não encontrado"));
 
         // Verifica se já existe convite pendente

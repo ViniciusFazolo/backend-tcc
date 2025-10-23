@@ -25,8 +25,8 @@ public class GroupInviteController {
     private final GroupInviteService inviteService;
 
     @PostMapping
-    public ResponseEntity<Void> sendInvite(@RequestBody GroupInviteRequestDTO request, @RequestHeader("userId") String userId) {
-        inviteService.sendInvite(request, userId);
+    public ResponseEntity<Void> sendInvite(@RequestBody GroupInviteRequestDTO request) {
+        inviteService.sendInvite(request);
         return ResponseEntity.ok().build();
     }
 
