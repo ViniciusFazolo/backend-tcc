@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.groupinvite.GroupInvite;
+import com.backend.tcc.domain.groupinvite.GroupInvite.Status;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.dto.groupinvite.GroupInviteRequestDTO;
@@ -68,6 +69,7 @@ public class GroupInviteService {
                         invite.getId(),
                         invite.getGroup().getId(),
                         invite.getGroup().getName(),
+                        userMapper.toDto(invite.getInvitedUser()),
                         userMapper.toDto(invite.getInvitedBy()),
                         invite.getStatus().name()
                 ))
@@ -94,5 +96,18 @@ public class GroupInviteService {
         }
 
         inviteRepository.save(invite);
+    }
+
+    public List<GroupInviteResponseDTO> getPendingInvitesByGroupId(String id) {
+        return inviteRepository.findByGroupIdAndStatus(id, Status.PENDING).stream()
+                .map(invite -> new GroupInviteResponseDTO(
+                        invite.getId(),
+                        invite.getGroup().getId(),
+                        invite.getGroup().getName(),
+                        userMapper.toDto(invite.getInvitedUser()),
+                        userMapper.toDto(invite.getInvitedBy()),
+                        invite.getStatus().name()
+                ))
+                .collect(Collectors.toList());
     }
 }

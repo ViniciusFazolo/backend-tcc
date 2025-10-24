@@ -35,6 +35,11 @@ public class GroupInviteController {
         return ResponseEntity.ok(inviteService.getPendingInvites(userId));
     }
 
+    @GetMapping("/pending/{id}")
+    public ResponseEntity<List<GroupInviteResponseDTO>> getPendingInvitesByGroupId(@PathVariable String id) {
+        return ResponseEntity.ok(inviteService.getPendingInvitesByGroupId(id));
+    }
+
     @PostMapping("/{inviteId}/respond")
     public ResponseEntity<Void> respondInvite(@PathVariable String inviteId, @RequestParam boolean accept) {
         inviteService.respondInvite(inviteId, accept);
