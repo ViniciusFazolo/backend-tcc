@@ -40,6 +40,10 @@ public class GroupInviteService {
         User invitedBy = userRepository.findById(request.senderId())
                 .orElseThrow(() -> new PadraoException("Usuário que convida não encontrado"));
 
+        if(invitedUser.getId().equals(invitedBy.getId())) {
+                throw new PadraoException("Não é possível se convidar para o grupo");
+        }
+
         // Verifica se já existe convite pendente
         boolean exists = inviteRepository.findByInvitedUserAndStatus(invitedUser, GroupInvite.Status.PENDING)
                 .stream()
