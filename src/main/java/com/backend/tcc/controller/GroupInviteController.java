@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +29,9 @@ public class GroupInviteController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<GroupInviteResponseDTO>> getPendingInvites(@RequestHeader("userId") String userId) {
-        return ResponseEntity.ok(inviteService.getPendingInvites(userId));
+    @GetMapping("/pending/user/{id}")
+    public ResponseEntity<List<GroupInviteResponseDTO>> getPendingInvites(@PathVariable String id) {
+        return ResponseEntity.ok(inviteService.getPendingInvites(id));
     }
 
     @GetMapping("/pending/{id}")
