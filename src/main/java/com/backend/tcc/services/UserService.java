@@ -50,6 +50,10 @@ public class UserService {
                 .orElseThrow(() -> new PadraoException("Usuário não encontrado"));
     }
 
+    public boolean existsByLogin(String login) {
+        return repository.existsByLogin(login);
+    }
+
     public ResponseEntity<ResponseUserDTO> save(RegisterUserDTO request) {
         try {
             User obj = new User();

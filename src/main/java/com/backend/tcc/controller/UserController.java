@@ -35,6 +35,11 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
+
+    @GetMapping("/existsByLogin/{login}")
+    public ResponseEntity<Boolean> existsByLogin(@PathVariable String login) {
+        return ResponseEntity.ok().body(service.existsByLogin(login));
+    }
     
     @GetMapping("/byGroupId/{id}")
     public ResponseEntity<List<UserResponseDTO>> findByGroupId(@PathVariable String id) {
