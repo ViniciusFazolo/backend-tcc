@@ -8,7 +8,7 @@ import com.backend.tcc.dto.group.GroupRequestDTO;
 import com.backend.tcc.dto.group.GroupResponseDTO;
 import com.backend.tcc.utils.Utils;
 
-@Mapper(componentModel = "spring", uses = {Utils.class, UserMapper.class})
+@Mapper(componentModel = "spring", uses = {Utils.class, UserMapper.class, UserGroupMapper.class})
 public interface GroupMapper {
 
     @Mapping(target = "adm.id", source = "adm")
