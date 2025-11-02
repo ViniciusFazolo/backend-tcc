@@ -87,6 +87,7 @@ public class GroupService {
             UserGroup userGroup = new UserGroup();
             userGroup.setGroup(entity);
             userGroup.setUser(user);
+            userGroup.setAdm(true);
             userGroupRepository.save(userGroup);
             
             return mapper.toDto(entity);
