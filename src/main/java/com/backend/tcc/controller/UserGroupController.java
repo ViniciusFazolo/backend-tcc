@@ -84,4 +84,25 @@ public class UserGroupController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/removeFromGroup")
+    public ResponseEntity<Void> removeFromGroup(@RequestParam(required = true) String userId, @RequestParam(required = true) String groupId) {
+        if(!userRepository.existsById(userId)) 
+            throw new PadraoException("Id do usuário informado não existe");
+
+        if(!groupRepository.existsById(groupId)) 
+            throw new PadraoException("Id do grupo informado não existe");
+
+        UserGroup userGroup = repository.findByUserIdAndGroupId(userId, groupId);
+
+        if(userGroup == null) throw new PadraoException("Erro ao buscar UserGroup");
+
+        try {
+            repository.delete(userGroup);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
 }
