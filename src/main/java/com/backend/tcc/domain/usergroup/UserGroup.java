@@ -6,6 +6,7 @@ import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +35,8 @@ public class UserGroup {
     @JsonIgnore
     private Group group;
 
+    @Column(name = "is_adm", nullable = false)
+    private boolean adm = false;
     private Integer totalNotifies = 0;
     private LocalTime hourLastPublish;
 }
