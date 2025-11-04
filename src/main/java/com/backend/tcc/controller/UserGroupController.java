@@ -1,6 +1,8 @@
 package com.backend.tcc.controller;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,12 +11,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.backend.tcc.domain.group.Group;
+import com.backend.tcc.domain.group.album.Album;
+import com.backend.tcc.domain.image.Images;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.exceptions.PadraoException;
+import com.backend.tcc.repositories.AlbumRepository;
 import com.backend.tcc.repositories.GroupRepository;
+import com.backend.tcc.repositories.ImageRepository;
 import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserRepository;
+import com.backend.tcc.services.CloudinaryService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +33,9 @@ public class UserGroupController {
     private final UserGroupRepository repository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
+    private final AlbumRepository albumRepository;
+    private final ImageRepository imageRepository;
+    private final CloudinaryService cloudinaryService;
 
     @GetMapping
     public void resetNotifies(
@@ -136,4 +146,51 @@ public class UserGroupController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @GetMapping("/leaveGroup")
+    @Transactional
+    public ResponseEntity<Void> leaveGroup(@RequestParam(required = true) String userId, @RequestParam(required = true) String groupId) {
+        if(!userRepository.existsById(userId)) 
+            throw new PadraoException("Id do usuário informado não existe");
+
+        if(!groupRepository.existsById(groupId)) 
+            throw new PadraoException("Id do grupo informado não existe");
+            
+        UserGroup userGroup = repository.findByUserIdAndGroupId(userId, groupId);
+        if(userGroup == null) throw new PadraoException("Erro ao buscar UserGroup");
+
+        boolean groupHasMoreThanOnePerson = userGroup.getGroup().getUserGroups().size() > 1;
+
+        if(userGroup.getGroup().getAdm().getId().equals(userId) && groupHasMoreThanOnePerson)
+            throw new PadraoException("Promova um membro como dono do grupo antes de sair");
+
+        try {
+            repository.delete(userGroup);
+
+            if(!groupHasMoreThanOnePerson) {
+                List<Album> albums = albumRepository.findByGroupId(groupId);
+                List<String> albumIds = albums.stream()
+                               .map(Album::getId)
+                               .collect(Collectors.toList());
+
+                List<Images> images = imageRepository.findAllByPublish_AlbumIdIn(albumIds);
+
+                groupRepository.deleteById(groupId);
+
+                for(Images image : images) {
+                    try {
+                        cloudinaryService.deleteFileByUrl(image.getImage());
+                    } catch (Exception ex) {
+                        System.err.println("Erro ao deletar imagem: " + ex.getMessage());
+                    }
+                }
+            }
+
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            System.out.println(e);
+            throw new PadraoException("Erro ao sair do grupo, tente novamente");
+        }
+    }
+
 }
