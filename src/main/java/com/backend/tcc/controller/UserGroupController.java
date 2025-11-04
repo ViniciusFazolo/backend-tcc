@@ -110,4 +110,30 @@ public class UserGroupController {
         }
     }
 
+    @GetMapping("/promoteToGroupOwner")
+    public ResponseEntity<Void> promoteToGroupOwner(@RequestParam(required = true) String userId, @RequestParam(required = true) String groupId) {
+        if(!userRepository.existsById(userId)) 
+            throw new PadraoException("Id do usuário informado não existe");
+
+        if(!groupRepository.existsById(groupId)) 
+            throw new PadraoException("Id do grupo informado não existe");
+
+        UserGroup userGroup = repository.findByUserIdAndGroupId(userId, groupId);
+
+        if(!userGroup.isAdm()) {
+            userGroup.setAdm(true);
+        }
+
+        User user = userRepository.findById(userId).get();
+        Group group = groupRepository.findById(groupId).get();
+        group.setAdm(user);
+
+        try {
+            repository.save(userGroup);
+            groupRepository.save(group);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
