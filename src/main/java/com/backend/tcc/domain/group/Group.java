@@ -3,14 +3,13 @@ package com.backend.tcc.domain.group;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
-
 import com.backend.tcc.domain.group.album.Album;
+import com.backend.tcc.domain.groupinvite.GroupInvite;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -40,9 +39,13 @@ public class Group {
     private User adm;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<UserGroup> userGroups = new ArrayList<>();
 
-    @OneToMany(mappedBy = "group")
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Album> albums;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<GroupInvite> groupInvites = new ArrayList<>(); // AD
 }

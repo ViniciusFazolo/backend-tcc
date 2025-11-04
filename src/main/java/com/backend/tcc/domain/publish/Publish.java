@@ -9,6 +9,7 @@ import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.image.Images;
 import com.backend.tcc.domain.userpublish.UserPublish;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,13 +33,13 @@ public class Publish {
     private String description;
     private LocalDateTime whenSent;
 
-    @OneToMany(mappedBy = "publish")
+    @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Images> images = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Commentary> commentaries;
 
-    @OneToMany(mappedBy = "publish")
+    @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<UserPublish> userPublishs = new ArrayList<>();;
 
     @ManyToOne

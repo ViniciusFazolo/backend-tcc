@@ -5,6 +5,7 @@ import java.util.List;
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.publish.Publish;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +33,6 @@ public class Album {
     @ManyToOne
     private Group group;
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Publish> publishs;
 }
