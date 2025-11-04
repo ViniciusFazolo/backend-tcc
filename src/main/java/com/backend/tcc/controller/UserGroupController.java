@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
 import com.backend.tcc.exceptions.PadraoException;
@@ -15,6 +16,7 @@ import com.backend.tcc.repositories.GroupRepository;
 import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -96,6 +98,9 @@ public class UserGroupController {
         UserGroup userGroup = repository.findByUserIdAndGroupId(userId, groupId);
 
         if(userGroup == null) throw new PadraoException("Erro ao buscar UserGroup");
+
+        if(userGroup.getGroup().getAdm().getId().equals(userId)) 
+            throw new PadraoException("Não é possível remover o dono do grupo");
 
         try {
             repository.delete(userGroup);
