@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.backend.tcc.constants.Contants;
+import com.backend.tcc.constants.Constants;
 import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.dto.group.album.AlbumRequestDTO;
 import com.backend.tcc.dto.group.album.AlbumResponseDTO;
@@ -29,7 +29,7 @@ public class AlbumService {
                 String imageUrl = cloudinaryService.uploadFile(request.image());
                 entity.setImage(imageUrl);
             } else {
-                entity.setImage(Contants.ALBUM_NOIMAGE_URL);
+                entity.setImage(Constants.ALBUM_NOIMAGE_URL);
             }
 
             return mapper.toDto(repository.save(entity));

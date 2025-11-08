@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.backend.tcc.constants.Contants;
+import com.backend.tcc.constants.Constants;
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.usergroup.UserGroup;
@@ -79,7 +79,7 @@ public class GroupService {
                 String imageUrl = cloudinaryService.uploadFile(request.image());
                 entity.setImage(imageUrl);
             }else{
-                entity.setImage(Contants.GROUP_NOIMAGE_URL);
+                entity.setImage(Constants.GROUP_NOIMAGE_URL);
             }
 
             entity = repository.save(entity);

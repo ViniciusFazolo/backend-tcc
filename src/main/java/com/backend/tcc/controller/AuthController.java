@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backend.tcc.constants.Contants;
+import com.backend.tcc.constants.Constants;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.user.UserRole;
 import com.backend.tcc.dto.user.auth.LoginRequestDTO;
@@ -66,7 +66,7 @@ public class AuthController {
                     String imageUrl = cloudinaryService.uploadFile(credentials.image());
                     newUser.setImage(imageUrl);
                 }else{
-                    newUser.setImage(Contants.GROUP_NOIMAGE_URL);
+                    newUser.setImage(Constants.GROUP_NOIMAGE_URL);
                 }
             } catch (Exception e) {
                 throw new PadraoException("Erro ao salvar imagem");
