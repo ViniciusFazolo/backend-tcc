@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.backend.tcc.constants.Constants;
 import com.backend.tcc.domain.group.Group;
 import com.backend.tcc.domain.group.album.Album;
 import com.backend.tcc.domain.image.Images;
@@ -176,6 +177,16 @@ public class UserGroupController {
                 List<Images> images = imageRepository.findAllByPublish_AlbumIdIn(albumIds);
 
                 groupRepository.deleteById(groupId);
+
+                for(Album album : albums) {
+                    if(album.getImage().equals(Constants.ALBUM_NOIMAGE_URL)) continue;
+
+                    try {
+                        cloudinaryService.deleteFileByUrl(album.getImage());
+                    } catch (Exception ex) {
+                        System.err.println("Erro ao deletar imagem do álbum: " + ex.getMessage());
+                    }
+                }
 
                 for(Images image : images) {
                     try {
