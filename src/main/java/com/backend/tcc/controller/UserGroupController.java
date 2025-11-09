@@ -176,7 +176,11 @@ public class UserGroupController {
 
                 List<Images> images = imageRepository.findAllByPublish_AlbumIdIn(albumIds);
 
+                Group group = groupRepository.findById(groupId).orElseThrow(() -> new PadraoException("Grupo não encontrado"));
+
                 groupRepository.deleteById(groupId);
+
+                cloudinaryService.deleteFileByUrl(group.getImage());
 
                 for(Album album : albums) {
                     if(album.getImage().equals(Constants.ALBUM_NOIMAGE_URL)) continue;
