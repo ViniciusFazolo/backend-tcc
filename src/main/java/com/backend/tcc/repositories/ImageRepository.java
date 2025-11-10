@@ -8,4 +8,5 @@ import com.backend.tcc.domain.image.Images;
 
 public interface ImageRepository extends JpaRepository<Images, String>{
     List<Images> findAllByPublish_AlbumIdIn(List<String> ids);
+    List<Images> findAllByPublishId(String id);
 }

@@ -24,6 +24,7 @@ import com.backend.tcc.repositories.UserGroupRepository;
 import com.backend.tcc.repositories.UserPublishRepository;
 import com.backend.tcc.repositories.UserRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -97,4 +98,19 @@ public class PublishService {
         }
     }
 
+    @Transactional
+    public void delete(String id){
+        Publish publish = repository.findById(id).orElseThrow(() -> new PadraoException("Publicação não encontrada"));
+        List<Images> images = imageRepository.findAllByPublishId(id);
+
+        repository.delete(publish);
+
+        for(Images image : images) {
+            try {
+                cloudinaryService.deleteFileByUrl(image.getImage());
+            } catch (Exception e) {
+                System.out.println("Erro ao deletar imagem de id: " + image.getId());
+            }
+        }
+    }
 }
