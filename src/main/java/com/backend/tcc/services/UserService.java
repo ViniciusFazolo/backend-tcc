@@ -61,9 +61,6 @@ public class UserService {
             obj.setLogin(request.login());
             obj.setPassword(passwordEncoder.encode(request.password()));
            
-            UserRole role = roleRepository.findById(request.role()).orElseThrow(() -> new PadraoException("Role não encontrada"));
-            obj.setRole(role);
-
             repository.save(obj);
             return ResponseEntity.status(HttpStatus.CREATED).body(mapper.toDTO(obj));
         } catch (DataIntegrityViolationException e) {
