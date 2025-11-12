@@ -55,7 +55,7 @@ public class AuthController {
         if(usuario.isEmpty()){
             User newUser = new User();
             newUser.setPassword(passwordEncoder.encode(credentials.password()));
-            newUser.setLogin(credentials.login());
+            newUser.setLogin(credentials.login().toLowerCase());
             newUser.setName(credentials.name());
 
             try {
