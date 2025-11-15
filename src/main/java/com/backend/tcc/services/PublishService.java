@@ -105,6 +105,16 @@ public class PublishService {
 
         repository.delete(publish);
 
+        List<UserGroup> userGroups = publish.getAlbum().getGroup().getUserGroups();
+
+        for(UserGroup ug : userGroups) {
+            int totalNotifies = ug.getTotalNotifies();
+
+            if(totalNotifies > 0) {
+                ug.setTotalNotifies(totalNotifies - 1);
+            }
+        }
+
         for(Images image : images) {
             try {
                 cloudinaryService.deleteFileByUrl(image.getImage());
