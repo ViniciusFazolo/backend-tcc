@@ -37,7 +37,7 @@ public class Publish {
     @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Images> images = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Commentary> commentaries;
 
     @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
