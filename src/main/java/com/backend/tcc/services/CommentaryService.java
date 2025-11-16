@@ -71,8 +71,15 @@ public class CommentaryService {
     }
 
     public String delete(String id) {
+        Commentary commentary = repository.findById(id).orElseThrow(() -> new PadraoException("Comentário não encontrado"));
+        Publish publish = publishRepository.findById(commentary.getPublish().getId()).orElseThrow(() -> new PadraoException("Publicação não encontrada"));
+
+        int qtCommentary = publish.getQtCommentary();
+        publish.setQtCommentary(qtCommentary > 0 ? qtCommentary - 1 : qtCommentary);
+
         try {
             repository.deleteById(id);
+            publishRepository.save(publish);
 
             return "Deletado com sucesso";
         } catch (Exception e) {
