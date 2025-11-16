@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/api/commentary")
 @RequiredArgsConstructor
-public class CommentaryController{
+public class CommentaryController {
     private final CommentaryService service;
 
     @GetMapping
@@ -33,6 +33,11 @@ public class CommentaryController{
     @GetMapping("/{id}")
     public ResponseEntity<CommentaryResponseDTO> findById(@PathVariable String id) {
         return ResponseEntity.ok().body(service.findById(id));
+    }
+
+    @GetMapping("/byPublishId/{id}")
+    public ResponseEntity<List<CommentaryResponseDTO>> findByPublishId(@PathVariable String id) {
+        return ResponseEntity.ok().body(service.findByPublishId(id));
     }
 
     @PostMapping

@@ -31,6 +31,12 @@ public class CommentaryService {
                 .orElseThrow(() -> new PadraoException("Comentário não encontrado"));
     }
 
+    public List<CommentaryResponseDTO> findByPublishId(String id) {
+        return repository.findByPublishIdOrderByWhenSentDesc(id).stream()
+                .map(mapper::toDto)
+                .toList();
+    }
+
     public CommentaryResponseDTO save(CommentaryRequestDTO request) {
         try {
             Commentary entity = mapper.toEntity(request);
