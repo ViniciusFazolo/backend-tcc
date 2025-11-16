@@ -32,6 +32,7 @@ public class Publish {
     private String id;
     private String description;
     private LocalDateTime whenSent;
+    private int qtCommentary;
 
     @OneToMany(mappedBy = "publish", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Images> images = new ArrayList<>();

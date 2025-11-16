@@ -26,5 +26,6 @@ public interface PublishMapper {
     @Mapping(source = "publish.whenSent", target = "whenSent")
     @Mapping(source = "publish.album.id", target = "album")
     @Mapping(source = "publish.images", target = "images")
+    @Mapping(source = "publish.qtCommentary", target = "qtCommentary")
     PublishResponseDTO toDto(UserPublish obj);
 }

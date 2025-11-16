@@ -11,5 +11,6 @@ public record PublishResponseDTO(
         String description,
         UserResponseDTO author,
         String whenSent,
+        int qtCommentary,
         String album) {
 }
