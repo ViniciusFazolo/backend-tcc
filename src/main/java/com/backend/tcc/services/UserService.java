@@ -1,6 +1,7 @@
 package com.backend.tcc.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.backend.tcc.constants.Constants;
 import com.backend.tcc.domain.user.User;
 import com.backend.tcc.domain.user.UserRole;
 import com.backend.tcc.dto.user.UserRequestDTO;
@@ -30,6 +32,7 @@ public class UserService {
     private final UserRoleRepository roleRepository;
     private final UserMapper mapper;
     private final GroupRepository groupRepository;
+    private final CloudinaryService cloudinaryService;
 
     public List<UserResponseDTO> findAll() {
         return repository.findAll().stream()
@@ -71,13 +74,31 @@ public class UserService {
     }
 
     public ResponseEntity<ResponseUserDTO> update(UserRequestDTO request){
+        User obj = repository.findById(request.id()).orElseThrow(() -> new PadraoException(request.id()));
+
+        Optional<User> userByLogin = repository.findByLogin(request.login());
+
+        if(userByLogin.isPresent() && !userByLogin.get().getId().equals(obj.getId())) {
+            throw new PadraoException("Esse e-mail já está em uso");
+        }
+
         try {
-            User obj = repository.findById(request.id()).orElseThrow(() -> new PadraoException(request.id()));
             obj.setName(request.name());
             obj.setLogin(request.login());
 
             if(request.password() != null){
                 obj.setPassword(passwordEncoder.encode(request.password()));
+            }
+
+            if (request.image() != null && !request.image().isEmpty()) {
+                System.out.println(request.image().getName());
+                if(!obj.getImage().equals(Constants.USER_NOIMAGE_URL)) {
+                    cloudinaryService.deleteFileByUrl(obj.getImage());
+                }
+                String imageUrl = cloudinaryService.uploadFile(request.image());
+                obj.setImage(imageUrl);
+            } else {
+                obj.setImage(Constants.USER_NOIMAGE_URL);
             }
 
             UserRole role = roleRepository.findById(request.roleId()).orElseThrow(() -> new PadraoException("Role não encontrada"));
