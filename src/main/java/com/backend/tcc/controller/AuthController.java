@@ -82,4 +82,10 @@ public class AuthController {
         return !tokenService.validateToken(token).isEmpty();
     }
 
+    @GetMapping("/newToken/{login}")
+    public ResponseEntity<LoginResponseDTO> newToken(@PathVariable String login) {
+       User user = repository.findByLogin(login).orElseThrow(() -> new PadraoException("Usuário não encontrado"));
+        String token = tokenService.generateToken(user);
+       return ResponseEntity.ok().body(new LoginResponseDTO(token, user.getLogin(), user.getId()));
+    }
 }
