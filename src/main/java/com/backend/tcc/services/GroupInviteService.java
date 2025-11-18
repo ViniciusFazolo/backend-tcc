@@ -53,6 +53,11 @@ public class GroupInviteService {
             throw new PadraoException("Convite já enviado para este usuário");
         }
 
+        UserGroup userAlreadyInGroup = userGroupRepository.findByUserIdAndGroupId(invitedUser.getId(), group.getId());
+        if(userAlreadyInGroup != null) {
+                throw new PadraoException("Este usuário já faz parte do grupo");
+        }
+
         GroupInvite invite = GroupInvite.builder()
                 .group(group)
                 .invitedUser(invitedUser)
